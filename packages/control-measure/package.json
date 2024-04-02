@@ -1,0 +1,28 @@
+{
+  "name": "@giserver/ctrl-measure",
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build --config ../../configs/vite.config.ts & tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@giserver/common": "workspace:^",
+    "@giserver/draw": "workspace:^",
+    "@turf/boolean-clockwise": "^6.5.0"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@giserver/common",
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build --config ../../configs/vite.config.ts & tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@turf/centroid": "^6.5.0",
+    "proj4": "^2.11.0"
+  },
+  "devDependencies": {
+    "@types/proj4": "^2.5.5"
+  }
+}

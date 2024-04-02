@@ -59,17 +59,9 @@ importers:
         specifier: ^2.5.5
         version: 2.5.5
 
-  packages/control-bto:
-    dependencies:
-      wheater:
-        specifier: ^1.0.11
-        version: 1.0.11
+  packages/control-bto: {}
 
-  packages/control-doodle:
-    dependencies:
-      wheater:
-        specifier: ^1.0.11
-        version: 1.0.11
+  packages/control-doodle: {}
 
   packages/control-measure:
     dependencies:
@@ -82,21 +74,12 @@ importers:
       '@turf/boolean-clockwise':
         specifier: ^6.5.0
         version: 6.5.0
-      wheater:
-        specifier: ^1.0.11
-        version: 1.0.11
 
   packages/draw:
     dependencies:
       '@turf/boolean-clockwise':
         specifier: ^6.5.0
         version: 6.5.0
-      wheater:
-        specifier: ^1.0.11
-        version: 1.0.11
-
-  packages/tip:
-    dependencies:
       wheater:
         specifier: ^1.0.11
         version: 1.0.11

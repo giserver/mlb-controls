@@ -25,7 +25,7 @@ onMounted(() => {
 
         map_libre = new maplibre.Map({
             container: "maplibre",
-            style: 'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+            style: 'https://demotiles.maplibre.org/style.json',
         });
 
         props.onCreated?.(map_box, map_libre);

@@ -2,8 +2,8 @@
 layout: home
 
 hero:
-  name: mapbox-extensions
-  text: mapbox extensions
+  name: mlb-controls
+  text: mlb controls
   tagline: 能用 易用 好用
   image:
     src: /logo.svg

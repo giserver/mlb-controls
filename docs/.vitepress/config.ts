@@ -1,10 +1,10 @@
 import { UserConfig, DefaultTheme } from 'vitepress'
 
 export default {
-    title: 'mapbox-extensions',
-    description: 'mapbox extensions',
+    title: 'mlb-controls',
+    description: 'mlb controls',
     appearance: 'dark',
-    base: '/mapbox-extensions/',
+    base: '/mlb-controls/',
     head: [
         [
             'link',
@@ -36,6 +36,6 @@ export default {
             }
         },
         // nav: [{ 'text': "组件", link: '/controls/' }],
-        socialLinks: [{ icon: 'github', link: "https://github.com/giserver/mapbox-extensions" }],
+        socialLinks: [{ icon: 'github', link: "https://github.com/giserver/mlb-controls" }],
     }
 } as UserConfig<DefaultTheme.Config>

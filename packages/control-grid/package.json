@@ -1,5 +1,5 @@
 {
-  "name": "@mlb-controls/common",
+  "name": "@mlb-controls/grid",
   "version": "1.0.0",
   "description": "",
   "files": [
@@ -24,10 +24,5 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@turf/centroid": "^6.5.0",
-    "proj4": "^2.11.0"
-  },
-  "devDependencies": {
-    "@types/proj4": "^2.5.5"
   }
 }

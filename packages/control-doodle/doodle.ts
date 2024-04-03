@@ -5,6 +5,8 @@ type TMapboxEventKey = keyof mapboxgl.MapEventType;
 type TMapboxEvent<T extends TMapboxEventKey> = mapboxgl.MapEventType[T] & mapboxgl.EventData;
 
 export interface DoodleOptions {
+    pencilImage?: string;
+
     linePaintBuilder?(paint: mapboxgl.LinePaint): void;
     fillPaintBuilder?(paint: mapboxgl.FillPaint): void;
 
@@ -127,7 +129,7 @@ export class Doodle {
 
         this.drawing = true;
         this.options.onStart?.();
-        this.map.getCanvas().style.cursor = `url("${this.pencilImage}"),auto`;
+        this.map.getCanvas().style.cursor = `url("${this.options.pencilImage ?? this.pencilImage}"),auto`;
         this.map.once('mousedown', this.onMouseDown);
     }
 
@@ -144,6 +146,14 @@ export class Doodle {
     clear() {
         this.currentLine.geometry.coordinates.length = 0;
         this.updateDataSource(true);
+    }
+
+    destory(){
+        this.stop();
+        this.map.removeLayer(this.lineLayerId);
+        this.map.removeLayer(this.polygonLayerId);
+        this.map.removeSource(this.lineSourceId);
+        this.map.removeSource(this.polygonSourceId);
     }
 
     private addPoint(lngLat: mapboxgl.LngLat, updatePolygon?: boolean) {

@@ -1,5 +1,5 @@
 {
-  "name": "@giserver/draw",
+  "name": "@mlb-controls/draw",
   "version": "1.0.0",
   "description": "",
   "files": [
@@ -10,7 +10,10 @@
   "typings": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": {
+        "default": "./dist/index.es.js",
+        "types": "./dist/index.d.ts"
+      },
       "require": "./dist/index.umd.js"
     }
   },
@@ -21,7 +24,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@turf/boolean-clockwise": "^6.5.0",
-    "wheater": "^1.0.11"
+    "@turf/boolean-clockwise": "^6.5.0"
   }
 }

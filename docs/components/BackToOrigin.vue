@@ -2,7 +2,7 @@
 import MapControl from "./MapControl.vue";
 
 import "../../packages/control-bto/index.css";
-import { BackToOriginControl } from "../../packages/control-bto/index";
+import { BackToOriginControl } from "../../packages/control-back/index";
 
 function onLoaded() {
     return () => new BackToOriginControl({

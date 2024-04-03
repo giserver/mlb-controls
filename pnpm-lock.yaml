@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@mlb-controls/common':
+        specifier: workspace:^
+        version: link:packages/common
       wheater:
         specifier: ^1.0.11
         version: 1.0.11
@@ -59,30 +62,47 @@ importers:
         specifier: ^2.5.5
         version: 2.5.5
 
+  packages/control-back:
+    dependencies:
+      '@mlb-controls/common':
+        specifier: workspace:^
+        version: link:../common
+
   packages/control-bto: {}
 
   packages/control-doodle: {}
 
+  packages/control-extend: {}
+
+  packages/control-eye: {}
+
+  packages/control-grid: {}
+
+  packages/control-location: {}
+
+  packages/control-marker: {}
+
   packages/control-measure:
     dependencies:
-      '@giserver/common':
+      '@mlb-controls/common':
         specifier: workspace:^
         version: link:../common
-      '@giserver/draw':
+      '@mlb-controls/draw':
         specifier: workspace:^
         version: link:../draw
       '@turf/boolean-clockwise':
         specifier: ^6.5.0
         version: 6.5.0
 
+  packages/control-switch-layer: {}
+
+  packages/control-switch-map: {}
+
   packages/draw:
     dependencies:
       '@turf/boolean-clockwise':
         specifier: ^6.5.0
         version: 6.5.0
-      wheater:
-        specifier: ^1.0.11
-        version: 1.0.11
 
 packages:
 

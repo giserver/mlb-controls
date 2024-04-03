@@ -1,5 +1,5 @@
 {
-  "name": "@giserver/ctrl-bto",
+  "name": "@mlb-controls/switch-map",
   "version": "1.0.0",
   "description": "",
   "files": [
@@ -10,7 +10,10 @@
   "typings": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": {
+        "default": "./dist/index.es.js",
+        "types": "./dist/index.d.ts"
+      },
       "require": "./dist/index.umd.js"
     }
   },

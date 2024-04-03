@@ -1,5 +1,5 @@
 {
-  "name": "mapbox-extensions",
+  "name": "mlb-controls",
   "version": "1.0.0",
   "private": true,
   "description": "",
@@ -7,6 +7,7 @@
     "test": "vitest run",
     "build": "pnpm -r --filter=./packages/* run build",
     "release": "bumpp package.json packages/**/package.json",
+    "dev": "pnpm build & pnpm docs:dev",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -28,6 +29,7 @@
     "vue": "^3.4.21"
   },
   "dependencies": {
+    "@mlb-controls/common": "workspace:^",
     "wheater": "^1.0.11"
   }
 }

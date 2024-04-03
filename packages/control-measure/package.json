@@ -1,5 +1,5 @@
 {
-  "name": "@giserver/ctrl-measure",
+  "name": "@mlb-controls/measure",
   "version": "1.0.0",
   "description": "",
   "files": [
@@ -10,7 +10,10 @@
   "typings": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": {
+        "default": "./dist/index.es.js",
+        "types": "./dist/index.d.ts"
+      },
       "require": "./dist/index.umd.js"
     }
   },
@@ -21,8 +24,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@giserver/common": "workspace:^",
-    "@giserver/draw": "workspace:^",
+    "@mlb-controls/draw": "workspace:^",
     "@turf/boolean-clockwise": "^6.5.0"
   }
 }

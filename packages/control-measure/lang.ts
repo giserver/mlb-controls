@@ -1,4 +1,4 @@
-import { ILanguage, units } from '@giserver/common';
+import { ILanguage, units } from '@mlb-controls/common';
 
 type TUnitsLanguage = {
     [k in units.TUnitsArea]: string

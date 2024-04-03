@@ -1,8 +1,8 @@
 import { creator, deep } from 'wheater';
 import booleanClockwise from '@turf/boolean-clockwise';
 
-import { units, calMeasure } from '@giserver/common';
-import { Drawer, DrawLineStringOptions, DrawPointOptions, DrawPolygonOptions, DrawType } from "@giserver/draw";
+import { units, calMeasure } from '@mlb-controls/common';
+import { Drawer, DrawLineStringOptions, DrawPointOptions, DrawPolygonOptions, DrawType } from "@mlb-controls/draw";
 
 import { IMeasureControlLanguage } from './lang';
 

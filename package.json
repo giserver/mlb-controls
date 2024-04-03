@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/geojson": "^7946.0.14",
     "@types/mapbox-gl": "^3.1.0",

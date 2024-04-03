@@ -1,4 +1,4 @@
-import { MapControl, MapControlOptions } from '@giserver/common';
+import { MapControl, MapControlOptions } from '@mlb-controls/common';
 
 import { IMeasureControlLanguage } from "./lang";
 import { MeasureManager, MeasureManagerOptions } from "./manager";

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import MapControl from "./MapControl.vue";
 
-import "../../packages/control-bto/index.css";
 import { BackToOriginControl } from "../../packages/control-back/index";
 
 function onLoaded() {

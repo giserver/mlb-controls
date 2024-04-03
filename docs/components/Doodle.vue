@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import MapControl from "./MapControl.vue";
 
-import "../../packages/control-doodle/index.css";
 import { DoodleControl } from "../../packages/control-doodle/index";
 
 function onLoaded() {

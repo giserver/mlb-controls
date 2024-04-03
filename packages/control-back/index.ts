@@ -2,7 +2,6 @@ import './index.css';
 import { dom } from 'wheater';
 import { MapControl, MapControlOptions } from '@mlb-controls/common';
 import { IBackControlLanguage } from './lang';
-import { Map } from 'mapbox-gl';
 
 export interface BackToOriginControlOptions extends MapControlOptions<IBackControlLanguage> {
     easeToOptions?: mapboxgl.EaseToOptions,
@@ -50,7 +49,7 @@ export class BackToOriginControl extends MapControl<IBackControlLanguage> {
         return element;
     }
 
-    removeControl(map: Map): void {
+    removeControl(map: mapboxgl.Map): void {
 
     }
 

@@ -67,7 +67,7 @@ export class DoodleControl extends MapControl<IDoodleContorlLanguage> {
         }
 
         const doodle_switch_svg = dom.createHtmlElement('div',
-            ["mlb-controls-doodle-switch-svg"],
+            ["mlb-ctrl-doodle-switch-svg"],
             [], {
             onInit: e => {
                 e.innerHTML = this.options.svg
@@ -77,7 +77,7 @@ export class DoodleControl extends MapControl<IDoodleContorlLanguage> {
         const doodle_switch_span = dom.createHtmlElement('span', [], [this.lang.name]);
 
         const doodle_switch_div = dom.createHtmlElement('div',
-            ["flex-center", "mlb-controls-doodle-switch", "mapboxgl-ctrl-group", "maplibregl-ctrl-group"],
+            ["flex-center", "mlb-ctrl-doodle-switch", "mapboxgl-ctrl-group", "maplibregl-ctrl-group"],
             [
                 doodle_switch_svg,
                 doodle_switch_span
@@ -110,7 +110,7 @@ export class DoodleControl extends MapControl<IDoodleContorlLanguage> {
         }
 
         return dom.createHtmlElement('div',
-            ["mlb-controls-doodle", "maplibregl-ctrl", "mapboxgl-ctrl"],
+            ["mlb-ctrl-doodle", "maplibregl-ctrl", "mapboxgl-ctrl"],
             [doodle_re_draw, doodle_switch_div]);
     }
 

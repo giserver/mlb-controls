@@ -4,12 +4,12 @@
     align-items: center;
 }
 
-.mlb-controls-doodle {
+.mlb-ctrl-doodle {
     display: flex;
     color: black;
 }
 
-.mlb-controls-doodle>div {
+.mlb-ctrl-doodle>div {
     pointer-events: auto;
     cursor: pointer;
     height: 29px;
@@ -18,10 +18,10 @@
     font-weight: 500;
 }
 
-.mlb-controls-doodle-switch {
+.mlb-ctrl-doodle-switch {
     margin-left: 10px;
 }
 
-.mlb-controls-doodle-switch-svg {
+.mlb-ctrl-doodle-switch-svg {
     height: 20px;
 }

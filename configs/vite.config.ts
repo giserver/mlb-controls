@@ -5,13 +5,13 @@ export default defineConfig(() => {
         build: {
             lib: {
                 entry: "index.ts",
-                name: "Giserver",
+                name: "MLBControls",
                 formats: ['es', 'umd'],
                 fileName: (format) => `index.${format}.js`
             },
             rollupOptions: {
                 // 确保外部化处理那些你不想打包进库的依赖
-                external: ["proj4", "wheater", /@giserver/, /@turf/],
+                external: ["proj4", "wheater", /@mlb-controls/, /@turf/],
             },
         }
     }

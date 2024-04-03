@@ -27,9 +27,10 @@ export default {
                         base: "/guide/controls",
                         collapsed: true,
                         items: [
-                            { text: "bto",  link: "/bto" },
-                            { text: "doodle",  link: "/doodle" },
-                            { text: "measure",  link: "/measure" }
+                            { text: "bto", link: "/bto" },
+                            { text: "doodle", link: "/doodle" },
+                            { text: "measure", link: "/measure" },
+                            { text: "extend", link: "/extend" }
                         ]
                     }
                 ]

@@ -58,6 +58,9 @@ export abstract class DrawBase<G extends GeoJSON.Geometry = GeoJSON.Geometry> {
     protected abstract onStop(): void;
     protected abstract onClear(): void;
 
+    abstract addPoint(lngLat: [number, number]): void;
+    abstract back(): void;
+
     start() {
         this.layers.forEach(layer => {
             if (!this.map.getLayer(layer.id))
@@ -85,6 +88,7 @@ export abstract class DrawBase<G extends GeoJSON.Geometry = GeoJSON.Geometry> {
                 this.updateDataSource();
             }
         }
+
         this.map.getCanvas().style.cursor = '';
         this.tip?.stop();
         this.onStop();
@@ -98,6 +102,16 @@ export abstract class DrawBase<G extends GeoJSON.Geometry = GeoJSON.Geometry> {
         this.fc.features = [];
         this.updateDataSource();
         this.onClear();
+    }
+
+    /**
+     * 通过feature id 删除绘制的图形
+     * @param id 
+     */
+    removeFeature(id: string) {
+        const index = this.fc.features.findIndex(x => x.id === id);
+        this.fc.features.splice(index, 1);
+        this.updateDataSource();
     }
 
     protected updateDataSource() {

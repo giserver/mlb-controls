@@ -2,7 +2,7 @@ import { creator, deep } from 'wheater';
 import booleanClockwise from '@turf/boolean-clockwise';
 
 import { units, calMeasure } from '@mlb-controls/common';
-import { Drawer, DrawLineStringOptions, DrawPointOptions, DrawPolygonOptions, DrawType } from "@mlb-controls/draw";
+import { DrawerManager, DrawLineStringOptions, DrawPointOptions, DrawPolygonOptions, DrawType } from "@mlb-controls/draw";
 
 import { IMeasureControlLanguage } from './lang';
 
@@ -12,14 +12,12 @@ type TMeasureUnits = {
 }
 
 export interface MeasureManagerOptions {
-    drawOptions?: {
-        point?: Omit<DrawPointOptions, "onRender">,
-        lineString?: Omit<DrawLineStringOptions, "onRender">,
-        polygon?: Omit<DrawPolygonOptions, "onRender">
-    }
+    point?: Omit<DrawPointOptions, "onRender">,
+    lineString?: Omit<DrawLineStringOptions, "onRender">,
+    polygon?: Omit<DrawPolygonOptions, "onRender">
 }
 
-export class MeasureManager extends Drawer {
+export class MeasureManager extends DrawerManager {
     /**
      * 测量id
      * 
@@ -59,9 +57,9 @@ export class MeasureManager extends Drawer {
     private polygonDistance: boolean = true;
 
     constructor(private map: mapboxgl.Map, options: MeasureManagerOptions, private lang: IMeasureControlLanguage) {
-        const drawPointOptions = options.drawOptions?.point ?? {};
-        const drawLineStringOptions = options.drawOptions?.lineString ?? {};
-        const drawPolygonOptions = options.drawOptions?.polygon ?? {};
+        const drawPointOptions = options.point ?? {};
+        const drawLineStringOptions = options.lineString ?? {};
+        const drawPolygonOptions = options.polygon ?? {};
 
         const refreshMeasureData = (type: DrawType, fc: GeoJSON.FeatureCollection) => {
             this.featuresMap.set(type, fc);
@@ -183,9 +181,9 @@ export class MeasureManager extends Drawer {
 
     /**
      * 删除测量数据
-     * @param id 
+     * @param id
      */
-    delFeature(id: string) {
+    delMeasureData(id: string) {
         let re = false;
         this.featuresMap.forEach(fc => {
             const index = fc.features.findIndex(x => x.id === id);
@@ -254,6 +252,14 @@ export class MeasureManager extends Drawer {
     }
 
     /**
+     * 清除所有测量
+     */
+    clear(): void {
+        this.featuresMap.set('custom', { type: 'FeatureCollection', features: [] })
+        super.clear();
+    }
+
+    /**
      * 重绘
      */
     reRender() {
@@ -302,7 +308,6 @@ export class MeasureManager extends Drawer {
                     }
                 },
                 point: {
-
                 }
             })
         });

@@ -11,7 +11,12 @@ export default defineConfig(() => {
             },
             rollupOptions: {
                 // 确保外部化处理那些你不想打包进库的依赖
-                external: ["proj4", "wheater", /@mlb-controls/, /@turf/],
+                external: (source, importer) => {
+                    return source === "proj4" ||
+                        source === "wheater" ||
+                        source.startsWith("@turf") ||
+                        (source.startsWith("@mlb-controls") && !source.endsWith(".css"))
+                }
             },
         }
     }

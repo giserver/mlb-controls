@@ -10,7 +10,8 @@
 }
 
 .mlb-ctrl-extend-wapper {
-    padding: 8px;
+    padding: 4px;
+    border-radius: 4px;
     background-color: white;
 
     position: absolute;

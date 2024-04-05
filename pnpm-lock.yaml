@@ -81,6 +81,9 @@ importers:
       '@mlb-controls/draw':
         specifier: workspace:^
         version: link:../draw
+      '@mlb-controls/extend':
+        specifier: workspace:^
+        version: link:../control-extend
       '@turf/boolean-clockwise':
         specifier: ^6.5.0
         version: 6.5.0

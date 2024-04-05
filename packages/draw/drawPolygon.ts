@@ -84,10 +84,26 @@ export class DrawPolygon extends DrawBase<GeoJSON.Polygon>{
         }
     }
 
+    addPoint(lngLat: [number, number]): void {
+        this.onMapClickHandler({
+            lngLat: { lng: lngLat[0], lat: lngLat[1] }
+        } as any);
+    }
+
+    back(): void {
+        if (!this.currentFeature) return;
+
+        const coordinates = this.currentFeature.geometry.coordinates;
+        const coordinate = coordinates[coordinates.length - 1];
+        this.onRightClickHandler({
+            lngLat: { lng: coordinate[0], lat: coordinate[1] }
+        } as any);
+    }
+
     protected onStart(): void {
-        if(this.map.getLayer(this.line_addion_id))
+        if (this.map.getLayer(this.line_addion_id))
             this.map.moveLayer(this.line_addion_id);
-        
+
         this.map.on('click', this.onMapClickHandler);
         this.map.on('dblclick', this.onMapDoubleClickHandler);
     }
@@ -199,10 +215,10 @@ export class DrawPolygon extends DrawBase<GeoJSON.Polygon>{
         if (coords.length > 2)
             coords.push(coords[0]);
 
-        if(coords.length > 2){
+        if (coords.length > 2) {
             this.currentFeature.properties = {
                 ...this.currentFeature.properties,
-                clockwise : booleanClockwise(coords)
+                clockwise: booleanClockwise(coords)
             }
         }
 

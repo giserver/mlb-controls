@@ -52,6 +52,22 @@ export class DrawLineString extends DrawBase<GeoJSON.LineString> {
             this.layers.push(circleLayer);
     }
 
+    addPoint(lngLat: [number, number]): void {
+        this.onMapClickHandler({
+            lngLat: { lng: lngLat[0], lat: lngLat[1] }
+        } as any);
+    }
+
+    back(): void {
+        if (!this.currentFeature) return;
+
+        const coordinates = this.currentFeature.geometry.coordinates;
+        const coordinate = coordinates[coordinates.length - 1];
+        this.onRightClickHandler({
+            lngLat: { lng: coordinate[0], lat: coordinate[1] }
+        } as any);
+    }
+
     protected onStart(): void {
         this.map.on('click', this.onMapClickHandler);
         this.map.on('dblclick', this.onMapDoubleClickHandler);
@@ -64,7 +80,7 @@ export class DrawLineString extends DrawBase<GeoJSON.LineString> {
     }
 
     protected onClear(): void {
-        
+
     }
 
 

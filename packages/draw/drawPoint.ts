@@ -51,6 +51,15 @@ export class DrawPoint extends DrawBase<GeoJSON.Point>{
         }
     }
 
+    addPoint(lngLat: [number, number]): void {
+        this.onMapClickHandle({
+            lngLat: { lng: lngLat[0], lat: lngLat[1] }
+        } as any);
+    }
+
+    back(): void {
+    }
+
     protected onStart(): void {
         this.map.on('click', this.onMapClickHandle);
     }
@@ -58,7 +67,7 @@ export class DrawPoint extends DrawBase<GeoJSON.Point>{
         this.map.off('click', this.onMapClickHandle);
     }
     protected onClear(): void {
-        
+
     }
 
     private onMapClickHandle = (e: mapboxgl.MapMouseEvent & Object) => {
@@ -76,9 +85,8 @@ export class DrawPoint extends DrawBase<GeoJSON.Point>{
         }
 
         this.options.onDrawed?.call(this, id, this.currentFeature.geometry);
-
         this.updateDataSource();
-
+        this.currentFeature = undefined;
         if (this.options.once) {
             this.stop();
         }

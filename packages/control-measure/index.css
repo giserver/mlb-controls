@@ -1,0 +1,22 @@
+.mlb-ctrl-measure {
+    display: flex;
+    height: 100%;
+
+    justify-content: center;
+    align-items: center;
+    column-gap: 4px;
+}
+
+.mlb-ctrl-measure>* {
+    cursor: pointer;
+}
+
+.mlb-ctrl-measure>.active {
+    background-color: #ccc;
+    padding: 2px;
+    border-radius: 2px;
+}
+
+.mlb-ctrl-extend-wapper {
+    height: 100%;
+}

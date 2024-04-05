@@ -1,6 +1,9 @@
-import { DrawBase, DrawLineString, DrawLineStringOptions, DrawPoint, DrawPointOptions, DrawPolygon, DrawPolygonOptions, DrawType } from ".";
+import { DrawBase, DrawType } from './drawBase';
+import { DrawPoint, DrawPointOptions } from './drawPoint';
+import { DrawLineString, DrawLineStringOptions } from './drawLineString';
+import { DrawPolygon, DrawPolygonOptions } from "./drawPolygon";
 
-export class Drawer {
+export class DrawerManager {
     private draws: Array<DrawBase>;
     private currentType?: DrawType;
 
@@ -22,17 +25,21 @@ export class Drawer {
         ]
     }
 
+    get currentDraw() {
+        return this.draws.find(x => x.type === this.currentType);
+    }
+
     start(type: DrawType) {
         this.stop();
 
         this.currentType = type;
-        this.draws.find(x => x.type === type)!.start();
+        this.currentDraw!.start();
 
         this.options.onStart?.();
     }
 
     stop() {
-        this.draws.find(x => x.type === this.currentType)?.stop();
+        this.currentDraw?.stop();
         this.currentType = undefined;
 
         this.options.onStop?.();

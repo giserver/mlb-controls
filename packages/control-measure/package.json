@@ -25,6 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@mlb-controls/draw": "workspace:^",
+    "@mlb-controls/extend": "workspace:^",
     "@turf/boolean-clockwise": "^6.5.0"
   }
 }

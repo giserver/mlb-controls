@@ -62,13 +62,7 @@ importers:
         specifier: ^2.5.5
         version: 2.5.5
 
-  packages/control-back:
-    dependencies:
-      '@mlb-controls/common':
-        specifier: workspace:^
-        version: link:../common
-
-  packages/control-bto: {}
+  packages/control-back: {}
 
   packages/control-doodle: {}
 
@@ -84,9 +78,6 @@ importers:
 
   packages/control-measure:
     dependencies:
-      '@mlb-controls/common':
-        specifier: workspace:^
-        version: link:../common
       '@mlb-controls/draw':
         specifier: workspace:^
         version: link:../draw

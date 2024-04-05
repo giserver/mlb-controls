@@ -11,7 +11,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiY29jYWluZWNvZGVyIiwiYSI6ImNrdHA1YjlleDBqYTEzM
 
 const props = defineProps<{
     onCreated?(map_box: mapboxgl.Map, map_libre: maplibre.Map): void,
-    onLoaded?(map_box: mapboxgl.Map, map_libre: maplibre.Map): () => mapboxgl.IControl & maplibre.IControl;
+    onLoaded?(map_box: mapboxgl.Map, map_libre: maplibre.Map): () => (mapboxgl.IControl & maplibre.IControl) | Array<mapboxgl.IControl & maplibre.IControl>;
 }>();
 
 let map_box: mapboxgl.Map;
@@ -43,10 +43,21 @@ onMounted(() => {
         let timeout = setInterval(() => {
             if (loadedFlags.every(x => x)) {
                 clearInterval(timeout);
-                const ctrl = props.onLoaded?.(map_box, map_libre);
-                if (ctrl) {
-                    map_box.addControl(ctrl());
-                    map_libre.addControl(ctrl());
+                const ctrlFunc = props.onLoaded?.(map_box, map_libre);
+                if (ctrlFunc) {
+                    const makeCtrls = () => {
+                        let ctrls = ctrlFunc();
+                        if (ctrls instanceof Array === false)
+                            ctrls = [ctrls];
+                        return ctrls;
+                    }
+                    makeCtrls().forEach(ctrl => {
+                        map_box.addControl(ctrl);
+                    });
+
+                    makeCtrls().forEach(ctrl => {
+                        map_libre.addControl(ctrl);
+                    })
                 }
             }
         }, 10)

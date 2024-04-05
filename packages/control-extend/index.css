@@ -1,3 +1,56 @@
-.hidden {
-    display: none !important;
+.mlb-ctrl-extend {
+    position: relative;
+    min-height: 29px;
+    min-width: 29px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mlb-ctrl-extend-wapper {
+    padding: 8px;
+    background-color: white;
+
+    position: absolute;
+    cursor: auto;
+    z-index: 100;
+}
+
+.mlb-ctrl-extend-pc-container {
+    transition: opacity 0.1s linear;
+}
+
+.mlb-ctrl-extend-pc-container.hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.mlb-ctrl-extend-pc-container.top {
+    top: 0;
+}
+
+.mlb-ctrl-extend-pc-container.bottom {
+    bottom: 0;
+}
+
+.mlb-ctrl-extend-pc-container.right {
+    left: 0;
+    transform: translateX(calc(-100% - 10px));
+}
+
+.mlb-ctrl-extend-pc-container.left {
+    right: 0;
+    transform: translateX(calc(100% + 10px));
+}
+
+.mlb-ctrl-extend-mobile-container {
+    transition: all 0.1s linear;
+    bottom: 0;
+    width: 100%;
+}
+
+.mlb-ctrl-extend-mobile-container.hidden {
+    transform: translateY(100%);
 }

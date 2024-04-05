@@ -1,9 +1,9 @@
 import './index.css';
 import { dom, validator } from 'wheater';
 import { TControlPostion, TOS } from '@mlb-controls/common';
-import { ExtendMobileManager } from './lib/ExtendMobileManager';
-import { ExtendPCManager } from './lib/ExtendPCManager';
-import { ExtendManager } from './lib/ExtendManager';
+import { ExtendMobileManager } from './ExtendMobileManager';
+import { ExtendPCManager } from './ExtendPCManager';
+import { ExtendManager } from './ExtendManager';
 
 export interface ExtendControlOptions {
 

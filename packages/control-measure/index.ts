@@ -2,12 +2,14 @@ import "./index.css";
 import "@mlb-controls/extend/dist/style.css";
 
 import { MapControl, MapControlOptions, TControlPostion } from '@mlb-controls/common';
+import { DrawType } from "@mlb-controls/draw";
 import { ExtendControl } from '@mlb-controls/extend';
+
+import { dom } from 'wheater';
 
 import { IMeasureControlLanguage } from "./lang";
 import { MeasureManager, MeasureManagerOptions } from "./manager";
-import { dom } from 'wheater';
-import { DrawType } from "@mlb-controls/draw";
+
 
 export interface MeasureControlOptions extends MapControlOptions<IMeasureControlLanguage>, MeasureManagerOptions {
     /**

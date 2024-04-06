@@ -30,6 +30,7 @@ export default {
                             { text: "bto", link: "/bto" },
                             { text: "doodle", link: "/doodle" },
                             { text: "extend", link: "/extend" },
+                            { text: "location", link: "/location" },
                             { text: "measure", link: "/measure" }
                         ]
                     }

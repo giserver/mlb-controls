@@ -20,12 +20,14 @@ let map_libre: maplibre.Map;
 onMounted(() => {
     nextTick(() => {
         map_box = new mapboxgl.Map({
-            container: "mapbox"
+            container: "mapbox",
+            attributionControl: false
         });
 
         map_libre = new maplibre.Map({
             container: "maplibre",
             style: 'https://demotiles.maplibre.org/style.json',
+            attributionControl: false
         });
 
         props.onCreated?.(map_box, map_libre);

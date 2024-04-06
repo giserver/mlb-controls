@@ -5,6 +5,7 @@ import { units, calMeasure } from '@mlb-controls/common';
 import { DrawerManager, DrawLineStringOptions, DrawPointOptions, DrawPolygonOptions, DrawType } from "@mlb-controls/draw";
 
 import { IMeasureControlLanguage } from './lang';
+import mapboxgl from 'mapbox-gl';
 
 type TMeasureUnits = {
     area: units.TUnitsArea | "M2KM2",
@@ -12,9 +13,11 @@ type TMeasureUnits = {
 }
 
 export interface MeasureManagerOptions {
-    point?: Omit<DrawPointOptions, "onRender">,
-    lineString?: Omit<DrawLineStringOptions, "onRender">,
-    polygon?: Omit<DrawPolygonOptions, "onRender">
+    point?: Omit<DrawPointOptions, "onRender">;
+    lineString?: Omit<DrawLineStringOptions, "onRender">;
+    polygon?: Omit<DrawPolygonOptions, "onRender">;
+
+    measureSymbolLayerBuilder?(layer: mapboxgl.SymbolLayer): void;
 }
 
 export class MeasureManager extends DrawerManager {
@@ -89,10 +92,7 @@ export class MeasureManager extends DrawerManager {
             }
         });
 
-        /**
-         * 添加测量数值图层
-         */
-        map.addLayer({
+        const symbolLayer = {
             id: this.id,
             type: 'symbol',
             source: {
@@ -111,7 +111,14 @@ export class MeasureManager extends DrawerManager {
                 'text-halo-color': 'white',
                 'text-halo-width': 2
             }
-        });
+        } as mapboxgl.SymbolLayer;
+
+        options.measureSymbolLayerBuilder?.(symbolLayer);
+
+        /**
+         * 添加测量数值图层
+         */
+        map.addLayer(symbolLayer);
 
         /**
          * 添加面方向图层

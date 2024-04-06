@@ -29,8 +29,8 @@ export default {
                         items: [
                             { text: "bto", link: "/bto" },
                             { text: "doodle", link: "/doodle" },
-                            { text: "measure", link: "/measure" },
-                            { text: "extend", link: "/extend" }
+                            { text: "extend", link: "/extend" },
+                            { text: "measure", link: "/measure" }
                         ]
                     }
                 ]

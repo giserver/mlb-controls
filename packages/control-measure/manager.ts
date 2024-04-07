@@ -62,7 +62,9 @@ export class MeasureManager extends DrawerManager {
     constructor(private map: mapboxgl.Map, options: MeasureManagerOptions, private lang: IMeasureControlLanguage) {
         const drawPointOptions = options.point ?? {};
         const drawLineStringOptions = options.lineString ?? {};
+        drawLineStringOptions.useCircle ??= true;
         const drawPolygonOptions = options.polygon ?? {};
+        drawPolygonOptions.useCircle ??= true;
 
         const refreshMeasureData = (type: DrawType, fc: GeoJSON.FeatureCollection) => {
             this.featuresMap.set(type, fc);
@@ -104,6 +106,8 @@ export class MeasureManager extends DrawerManager {
                 'text-size': ['case',
                     ['boolean', ['get', 'center'], false], 12,
                     ['==', ['get', 'type'], 'Polygon'], 16, 14],
+                'text-offset': [0, -1],
+                "text-max-width": 30
             },
             paint: {
                 'text-color': ['case',

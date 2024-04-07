@@ -7,6 +7,8 @@ import maplibre from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { nextTick, onMounted, onUnmounted } from 'vue';
 
+import "./index.css";
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiY29jYWluZWNvZGVyIiwiYSI6ImNrdHA1YjlleDBqYTEzMm85bTBrOWE0aXMifQ.J8k3R1QBqh3pyoZi_5Yx9w';
 
 const props = defineProps<{
@@ -79,9 +81,3 @@ onUnmounted(() => {
     <h3>maplibre</h3>
     <div class="map" id="maplibre"></div>
 </template>
-
-<style>
-.map {
-    height: 450px;
-}
-</style>

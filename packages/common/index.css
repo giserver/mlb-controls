@@ -1,0 +1,64 @@
+.mlb-ctrl-modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+
+    background-color: #00000055
+}
+
+.mlb-ctrl-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0 2px;
+}
+
+.mlb-ctrl-modal-header-title {
+    font-weight: 500;
+}
+
+.mlb-ctrl-modal-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+
+    border-radius: 4px;
+    width: fit-content;
+    min-width: 200px;
+    height: fit-content;
+    background-color: #fefefe;
+
+    margin-top: 10%;
+}
+
+.mlb-ctrl-modal-foot {
+    display: flex;
+    justify-content: end;
+    column-gap: 10px;
+    margin-top: 24px;
+}
+
+.mlb-ctrl-btn{
+    border: 0 !important;
+    cursor: pointer !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    width: fit-content !important;
+}
+
+.mlb-ctrl-btn-confirm{
+    color: #fff;
+    background-color: #1677FF;
+}
+
+.mlb-ctrl-btn-default{
+    border: 1px solid #ddd !important;
+    box-sizing: border-box;
+}

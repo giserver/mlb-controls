@@ -31,6 +31,7 @@ export default {
                             { text: "doodle", link: "/doodle" },
                             { text: "extend", link: "/extend" },
                             { text: "location", link: "/location" },
+                            { text: "marker", link: "/marker" },
                             { text: "measure", link: "/measure" }
                         ]
                     }

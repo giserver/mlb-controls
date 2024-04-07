@@ -15,7 +15,8 @@
         "types": "./dist/index.d.ts"
       },
       "require": "./dist/index.umd.js"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
     "build": "vite build --config ../../configs/vite.config.ts & tsc"

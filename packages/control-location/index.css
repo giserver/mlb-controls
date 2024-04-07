@@ -1,13 +1,9 @@
 .mlb-ctrl-location {
     display: flex;
     column-gap: 8px;
-
     padding: 0 4px;
     margin: 0 !important;
-
     background-color: hsla(0, 0%, 100%, .5);
-    color: black;
-
     cursor: pointer;
 }
 

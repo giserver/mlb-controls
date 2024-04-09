@@ -16,7 +16,8 @@ export abstract class ExtendManager {
             e.stopPropagation();
         })
 
-        this.extended = options.defaultExtended && true;
+        options.defaultExtended ??= false;
+        this.extended = options.defaultExtended;
         this.extend(this.extended);
 
         options.controller.addEventListener('click', () => {

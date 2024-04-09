@@ -278,8 +278,10 @@ export class MeasureManager extends DrawerManager {
         this.featuresMap.forEach((v, k) => {
             if (k === 'Polygon') {
                 v.features.forEach(f => {
-                    if (f.geometry.type === 'Polygon')
-                        f.properties['clockwise'] = booleanClockwise(f.geometry.coordinates[0])
+                    if (f.geometry.type === 'Polygon'){
+                        if(!f.properties) f.properties = {};
+                        f.properties!['clockwise'] = booleanClockwise(f.geometry.coordinates[0])
+                    }
                 });
             }
             features.push(...v.features);

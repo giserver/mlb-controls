@@ -22,6 +22,8 @@ export function createDrawer<K extends keyof DrawerTypeMap>(map: mapboxgl.Map, t
     if (type === 'Point') return new DrawPoint(map, options);
     if (type === 'LineString') return new DrawLineString(map, options);
     if (type === 'Polygon') return new DrawPolygon(map, options);
+
+    throw Error(`can create type : ${type}`);
 }
 
 export class DrawerManager {

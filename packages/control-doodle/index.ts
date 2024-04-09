@@ -70,7 +70,7 @@ export class DoodleControl extends MapControl<IDoodleContorlLanguage> {
             ["mlb-ctrl-doodle-switch-svg"],
             [], {
             onInit: e => {
-                e.innerHTML = this.options.svg
+                e.innerHTML = this.options.svg!
             }
         });
 

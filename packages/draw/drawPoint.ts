@@ -27,9 +27,9 @@ export class DrawPoint extends DrawBase<GeoJSON.Point>{
             } as mapboxgl.SymbolLayer
 
             if (options.symbolPaintBuilder)
-                options.symbolPaintBuilder(symbolLayer.paint);
+                options.symbolPaintBuilder(symbolLayer.paint!);
             if (options.symbolLayoutBuilder)
-                options.symbolLayoutBuilder(symbolLayer.layout);
+                options.symbolLayoutBuilder(symbolLayer.layout!);
 
             this.layers.push(symbolLayer);
         } else {
@@ -45,7 +45,7 @@ export class DrawPoint extends DrawBase<GeoJSON.Point>{
                 }
             } as mapboxgl.CircleLayer;
 
-            options.circlePaintBuilder?.(circleLayer.paint);
+            options.circlePaintBuilder?.(circleLayer.paint!);
 
             this.layers.push(circleLayer);
         }

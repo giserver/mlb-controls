@@ -82,6 +82,12 @@ importers:
       '@mlb-controls/extend':
         specifier: workspace:^
         version: link:../control-extend
+      '@turf/bbox':
+        specifier: ^6.5.0
+        version: 6.5.0
+      '@turf/centroid':
+        specifier: ^6.5.0
+        version: 6.5.0
 
   packages/control-measure:
     dependencies:
@@ -99,11 +105,7 @@ importers:
 
   packages/control-switch-map: {}
 
-  packages/draw:
-    dependencies:
-      '@turf/boolean-clockwise':
-        specifier: ^6.5.0
-        version: 6.5.0
+  packages/draw: {}
 
 packages:
 
@@ -729,6 +731,13 @@ packages:
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
+
+  /@turf/bbox@6.5.0:
+    resolution: {integrity: sha512-RBbLaao5hXTYyyg577iuMtDB8ehxMlUqHEJiMs8jT1GHkFhr6sYre3lmLsPeYEi/ZKj5TP5tt7fkzNdJ4GIVyw==}
+    dependencies:
+      '@turf/helpers': 6.5.0
+      '@turf/meta': 6.5.0
+    dev: false
 
   /@turf/boolean-clockwise@6.5.0:
     resolution: {integrity: sha512-45+C7LC5RMbRWrxh3Z0Eihsc8db1VGBO5d9BLTOAwU4jR6SgsunTfRWR16X7JUwIDYlCVEmnjcXJNi/kIU3VIw==}

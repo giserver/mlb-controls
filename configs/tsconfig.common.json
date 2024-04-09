@@ -7,5 +7,9 @@
         "emitDeclarationOnly": true,
         "esModuleInterop": true,
         "declaration": true,
+        "resolveJsonModule": true,
+        "allowUnusedLabels": false,
+        "allowUnreachableCode": false,
+        "strict": true,
     }
 }

@@ -1,5 +1,31 @@
 import { creator } from 'wheater';
-import { MarkerFeatrueProperties, TMarkerFeature } from './types';
+import centroid from '@turf/centroid'
+import bbox from '@turf/bbox'
+import { TMarkerFeature, TMarkerFeatureCollection } from './types';
+import { DrawBaseOptions, DrawType, DrawerManager } from '@mlb-controls/draw';
+
+
+
+export interface MarkerManagerOptions {
+    /**
+     * 初始化数据
+     */
+    data: TMarkerFeatureCollection;
+
+    /**
+     * 绘制结束
+     * 
+     * 数据并没有存入MarkerManger中
+     * @param id 
+     * @param geometry 
+     */
+    onDrawed(id: string, geometry: GeoJSON.Geometry): void;
+
+    /**
+     * 在绘制之前执行，可以取消测量等占用鼠标事件的功能
+     */
+    beforeDraw?(): void;
+}
 
 export class MarkerManager {
     readonly id = creator.uuid();
@@ -78,13 +104,9 @@ export class MarkerManager {
     }];
 
     private hiddenLayerIds = new Map<string, string>();
+    private drawerManager: DrawerManager;
 
-    /**
-     *
-     */
-    constructor(private map: mapboxgl.Map, private options: {
-        data: GeoJSON.FeatureCollection<GeoJSON.Geometry, MarkerFeatrueProperties>
-    }) {
+    constructor(private map: mapboxgl.Map, private options: MarkerManagerOptions) {
 
         this.map.addSource(this.id, {
             type: 'geojson',
@@ -92,6 +114,70 @@ export class MarkerManager {
         });
 
         this.layers.forEach(x => this.map.addLayer(x));
+
+        const drawOptions = {
+            once: true,
+            onDrawed: (id, geometry) => {
+                this.drawerManager.clear();
+                this.options.onDrawed(id, geometry);
+            }
+        } as DrawBaseOptions;
+
+        this.drawerManager = new DrawerManager(map, {
+            point: {
+                ...drawOptions
+            },
+            lineString: {
+                ...drawOptions
+            },
+            polygon: {
+                ...drawOptions
+            }
+        });
+    }
+
+    /**
+     * 绘制
+     * @param type 
+     */
+    draw(type: DrawType) {
+        this.options.beforeDraw?.();
+        this.drawerManager.start(type);
+    }
+
+    easeTo(id: string, options: Omit<mapboxgl.EaseToOptions, "center">) {
+        const feature = this.getFeature(id);
+        if (feature) {
+            const center = centroid(feature as any);
+            this.map.easeTo({
+                center: center.geometry.coordinates as [number, number],
+                ...options
+            });
+        }
+
+        throw Error(`feature id not found: ${id} `);
+    }
+
+    fitTo(id: string, options: mapboxgl.FitBoundsOptions={}) {
+        const feature = this.getFeature(id);
+        if (feature) {
+            const box = bbox(feature as any);
+            options.maxZoom ??= 20;
+            options.padding ??= 50;
+
+            this.map.fitBounds([box[0], box[1], box[2], box[3]], options);
+        }
+
+        throw Error(`feature id not found: ${id} `);
+    }
+
+    /**
+     * 获取 feature
+     * @param id 
+     * @returns 
+     */
+    getFeature(id: string) {
+        return this.options.data.features.find(x => x.properties.id === id);
     }
 
     /**
@@ -119,6 +205,13 @@ export class MarkerManager {
         const index = this.options.data.features.findIndex(x => x.properties.id === id);
         if (index < 0) return;
         this.options.data.features.splice(index, 1);
+        this.reRender();
+    }
+
+    removeLayer(id: string) {
+        this.options.data.features = this.options.data.features.filter(x => x.properties.layerId !== id);
+        if (this.hiddenLayerIds.has(id))
+            this.hiddenLayerIds.delete(id);
         this.reRender();
     }
 

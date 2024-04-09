@@ -29,7 +29,7 @@ export class BackToOriginControl extends MapControl<IBackControlLanguage> {
                 </defs>
                 </svg>`
             }
-        }).querySelector('svg');
+        }).querySelector('svg')!;
     }
 
     createElement(map: mapboxgl.Map): HTMLElement {
@@ -42,7 +42,7 @@ export class BackToOriginControl extends MapControl<IBackControlLanguage> {
 
         const element = dom.createHtmlElement('div',
             ["mlb-ctrl-back", "maplibregl-ctrl-group", "maplibregl-ctrl", "mapboxgl-ctrl", "mapboxgl-ctrl-group"],
-            [this.options.icon], {
+            [this.options.icon!], {
             onClick: () => {
                 map.easeTo(easeToOptions);
             }

@@ -30,7 +30,7 @@ export class DrawPolygon extends DrawBase<GeoJSON.Polygon>{
         } as mapboxgl.FillLayer;
 
         if (options.fillPaintBuilder)
-            options.fillPaintBuilder(fillLayer.paint);
+            options.fillPaintBuilder(fillLayer.paint!);
         this.layers.push(fillLayer);
 
         if (options.useOutLine !== false) {
@@ -45,7 +45,7 @@ export class DrawPolygon extends DrawBase<GeoJSON.Polygon>{
             } as mapboxgl.LineLayer;
 
             if (options.linePaintBuilder)
-                options.linePaintBuilder(lineLayer.paint);
+                options.linePaintBuilder(lineLayer.paint!);
 
             this.layers.push(lineLayer);
 
@@ -77,7 +77,7 @@ export class DrawPolygon extends DrawBase<GeoJSON.Polygon>{
             } as mapboxgl.CircleLayer;
 
             if (options.circlePaintBuilder)
-                options.circlePaintBuilder(circleLayer.paint);
+                options.circlePaintBuilder(circleLayer.paint!);
 
             this.layers.push(circleLayer);
         }

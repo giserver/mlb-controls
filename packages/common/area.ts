@@ -41,7 +41,7 @@ export function area(value: GeoJSON.Polygon | GeoJSON.MultiPolygon | Array<[numb
      * @returns 
      */
     function calClosedPolygon(coordinates: GeoJSON.Position[]): number {
-        const toProjection = typeof projExpression === 'string' ? projExpression : projExpression(coordinates);
+        const toProjection = typeof projExpression === 'string' ? projExpression : projExpression!(coordinates);
         const proj_coords = coordinates.map(x => proj4(toProjection, x));
         return area(proj_coords as any);
     }

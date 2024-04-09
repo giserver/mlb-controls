@@ -41,10 +41,10 @@ export class DrawLineString extends DrawBase<GeoJSON.LineString> {
         } as mapboxgl.CircleLayer;
 
         if (options.linePaintBuilder)
-            options.linePaintBuilder(lineLayer.paint);
+            options.linePaintBuilder(lineLayer.paint!);
 
         if (options.circlePaintBuilder)
-            options.circlePaintBuilder(circleLayer.paint);
+            options.circlePaintBuilder(circleLayer.paint!);
 
         this.layers.push(lineLayer);
 

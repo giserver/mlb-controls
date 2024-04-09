@@ -26,6 +26,8 @@
   "license": "ISC",
   "dependencies": {
     "@mlb-controls/draw": "workspace:^",
-    "@mlb-controls/extend": "workspace:^"
+    "@mlb-controls/extend": "workspace:^",
+    "@turf/bbox": "^6.5.0",
+    "@turf/centroid": "^6.5.0"
   }
 }

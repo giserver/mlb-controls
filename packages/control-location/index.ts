@@ -52,23 +52,23 @@ export class LocationControl extends MapControl<ILocationContorlLanguage>{
         const elementLngLat = dom.createHtmlElement('div', [], [this.lang.coordinate], {
             onClick
         });
-        const elementPitch = dom.createHtmlElement('div', [], [this.lang.pitch + ": " + map.getPitch().toFixed(this.options.precision.pitch)], {
+        const elementPitch = dom.createHtmlElement('div', [], [this.lang.pitch + ": " + map.getPitch().toFixed(this.options.precision!.pitch)], {
             onClick
         });
-        const elementZoom = dom.createHtmlElement('div', [], [this.lang.zoom + ": " + map.getZoom().toFixed(this.options.precision.zoom)], {
+        const elementZoom = dom.createHtmlElement('div', [], [this.lang.zoom + ": " + map.getZoom().toFixed(this.options.precision!.zoom)], {
             onClick
         });
-        const elementHeading = dom.createHtmlElement('div', [], [this.lang.bearing + ": " + map.getBearing().toFixed(this.options.precision.bearing)], {
+        const elementHeading = dom.createHtmlElement('div', [], [this.lang.bearing + ": " + map.getBearing().toFixed(this.options.precision!.bearing)], {
             onClick
         });
 
         this.mousemoveHandler = (e) => {
-            elementLngLat.innerText = this.lang.coordinate + `: ${e.lngLat.lng.toFixed(this.options.precision.lngLat)} , ${e.lngLat.lat.toFixed(this.options.precision.lngLat)}`;
+            elementLngLat.innerText = this.lang.coordinate + `: ${e.lngLat.lng.toFixed(this.options.precision!.lngLat)} , ${e.lngLat.lat.toFixed(this.options.precision!.lngLat)}`;
         };
         this.moveHandler = () => {
-            elementPitch.innerText = this.lang.pitch + ": " + map.getPitch().toFixed(this.options.precision.pitch);
-            elementZoom.innerText = this.lang.zoom + ": " + map.getZoom().toFixed(this.options.precision.zoom);
-            elementHeading.innerText = this.lang.bearing + ": " + map.getBearing().toFixed(this.options.precision.bearing);
+            elementPitch.innerText = this.lang.pitch + ": " + map.getPitch().toFixed(this.options.precision!.pitch);
+            elementZoom.innerText = this.lang.zoom + ": " + map.getZoom().toFixed(this.options.precision!.zoom);
+            elementHeading.innerText = this.lang.bearing + ": " + map.getBearing().toFixed(this.options.precision!.bearing);
         }
 
         map.on('mousemove', this.mousemoveHandler);
@@ -78,7 +78,7 @@ export class LocationControl extends MapControl<ILocationContorlLanguage>{
             ["mlb-ctrl-location", "mapboxgl-ctrl", "maplibregl-ctrl"],
             [elementLngLat, elementPitch, elementHeading, elementZoom], {
             onInit: e => {
-                e.title = this.options.description
+                e.title = this.options.description ?? ""
             }
         });
     }

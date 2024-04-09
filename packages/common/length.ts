@@ -30,7 +30,7 @@ export function length(value: GeoJSON.Geometry | Array<[number, number]>, projEx
     if (value.type === 'Point' || value.type === "MultiPoint") return 0;
 
     function calSingleLineLength(coordinates: GeoJSON.Position[]) {
-        const toProjection = typeof projExpression === 'string' ? projExpression : projExpression(coordinates);
+        const toProjection = typeof projExpression === 'string' ? projExpression : projExpression!(coordinates);
         const proj_coords = coordinates.map(x => proj4(toProjection, x));
         return length(proj_coords as any);
     }

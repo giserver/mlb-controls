@@ -22,7 +22,7 @@ export interface MeasureControlOptions extends MapControlOptions<IMeasureControl
 
 export class MeasureControl extends MapControl<IMeasureControlLanguage> {
 
-    private _manager: MeasureManager
+    private declare _manager: MeasureManager
 
     get manager() {
         return this._manager;
@@ -69,11 +69,7 @@ export class MeasureControl extends MapControl<IMeasureControlLanguage> {
             [
                 dom.createHtmlElement('div', [], [], {
                     onInit: e => {
-                        e.innerHTML = `<svg width="20" height="20" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1369">
-                        <g fill="none" stroke="black">
-                        <path stroke-width="60" d="M512 427.023m-90 0a90 90 0 1 0 180 0 90 90 0 1 0-180 0Z" fill="" p-id="1370"></path>
-                        <path stroke-width="60" d="M512 910.402c-19.14 0-37.482-5.854-53.042-16.929-14.063-10.01-24.926-23.596-31.589-39.46L255.043 585.177l-0.154-0.25C225.522 537.209 210 482.605 210 427.021c0-80.667 31.414-156.506 88.454-213.546S431.333 125.021 512 125.021s156.506 31.414 213.546 88.454C782.587 270.515 814 346.354 814 427.021c0 55.849-15.655 110.671-45.274 158.539l-0.264 0.419-172.081 268.716c-6.755 15.726-17.66 29.176-31.704 39.055-15.485 10.895-33.7 16.652-52.677 16.652zM309.246 551.141l175.494 273.78 1.194 3.197c4.149 11.107 14.381 18.284 26.066 18.284 11.584 0 21.791-7.071 26.004-18.015l1.165-3.028L714.43 551.678C737.701 513.983 750 470.884 750 427.021c0-63.572-24.756-123.339-69.709-168.292-44.952-44.951-104.719-69.708-168.291-69.708s-123.339 24.756-168.292 69.708S274 363.449 274 427.021c0 43.64 12.186 86.552 35.246 124.12z" p-id="1371"></path>
-                        </g></svg>`
+                        e.innerHTML = `<svg width="20" height="20" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4875" ><path d="M512 85.333333a341.333333 341.333333 0 0 0-341.333333 341.333334c0 230.4 300.8 490.666667 313.6 501.76a42.666667 42.666667 0 0 0 55.466666 0C554.666667 917.333333 853.333333 657.066667 853.333333 426.666667a341.333333 341.333333 0 0 0-341.333333-341.333334z m0 753.066667c-90.88-85.333333-256-269.226667-256-411.733333a256 256 0 0 1 512 0c0 142.506667-165.12 326.826667-256 411.733333zM512 256a170.666667 170.666667 0 1 0 170.666667 170.666667 170.666667 170.666667 0 0 0-170.666667-170.666667z m0 256a85.333333 85.333333 0 1 1 85.333333-85.333333 85.333333 85.333333 0 0 1-85.333333 85.333333z" p-id="4876"></path></svg>`
                     },
                     onClick: (_, e) => {
                         clickMeasureItem(e, "Point");
@@ -132,7 +128,7 @@ export class MeasureControl extends MapControl<IMeasureControlLanguage> {
                     </g>
                     </svg>`
                 }
-            }).querySelector('svg')
+            }).querySelector('svg')!
         });
 
         return extend.onAdd(map);
@@ -143,6 +139,6 @@ export class MeasureControl extends MapControl<IMeasureControlLanguage> {
     }
 
     getDefaultPosition = () => {
-        return this.options.position;
+        return this.options.position!;
     }
 }

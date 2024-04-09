@@ -1,4 +1,5 @@
 import { dom } from "wheater";
+import { ILanguage } from "./mapControl";
 
 /**
  * 使dom可以拖拽
@@ -76,7 +77,7 @@ export function createModal(options: ModalOptions): [HTMLElement, () => void] {
 
     const modal = dom.createHtmlElement('div', ['mlb-ctrl-modal'], [container]);
     document.body.append(modal);
-    
+
     container.style.top = '0';
     container.style.left = `${(modal.clientWidth - container.clientWidth) / 2}px`;
     makeDomDraggable(container, header)
@@ -97,13 +98,15 @@ export function createModal(options: ModalOptions): [HTMLElement, () => void] {
     return [container, remove];
 }
 
+export interface IConfirmModelLanguage extends ILanguage {
+    confirm: string
+    cancel: string
+}
+
 export interface ConfirmModalOptions extends ModalOptions {
     onConfirm?(): void,
     withCancel?: boolean,
-    lang?: {
-        confirm?: string,
-        cancel?: string
-    }
+    lang?: Partial<IConfirmModelLanguage>
 }
 
 /**

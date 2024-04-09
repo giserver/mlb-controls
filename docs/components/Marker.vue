@@ -11,7 +11,3 @@ function onLoaded() {
 <template>
     <MapControl :on-loaded="onLoaded"></MapControl>
 </template>
-
-<style>
-
-</style>

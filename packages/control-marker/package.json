@@ -25,5 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mlb-controls/draw": "workspace:^",
+    "@mlb-controls/extend": "workspace:^"
   }
 }

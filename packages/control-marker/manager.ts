@@ -157,7 +157,7 @@ export class MarkerManager {
         (this.map.getSource(this.id) as mapboxgl.GeoJSONSource)
             .setData({
                 type: "FeatureCollection",
-                features: this.options.data.features.filter(x => !this.hiddenLayerIds.has(x.properties.id))
+                features: this.options.data.features.filter(x => !this.hiddenLayerIds.has(x.properties.layerId))
             });
     }
 }

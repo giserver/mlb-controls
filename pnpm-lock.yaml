@@ -74,7 +74,14 @@ importers:
 
   packages/control-location: {}
 
-  packages/control-marker: {}
+  packages/control-marker:
+    dependencies:
+      '@mlb-controls/draw':
+        specifier: workspace:^
+        version: link:../draw
+      '@mlb-controls/extend':
+        specifier: workspace:^
+        version: link:../control-extend
 
   packages/control-measure:
     dependencies:

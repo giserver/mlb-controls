@@ -3,6 +3,27 @@ import { DrawPoint, DrawPointOptions } from './drawPoint';
 import { DrawLineString, DrawLineStringOptions } from './drawLineString';
 import { DrawPolygon, DrawPolygonOptions } from "./drawPolygon";
 
+export interface DrawerTypeMap {
+    "Point": {
+        options: DrawPointOptions,
+        drawer: DrawPoint
+    },
+    "LineString": {
+        options: DrawLineStringOptions,
+        drawer: DrawLineString
+    },
+    "Polygon": {
+        options: DrawPolygonOptions,
+        drawer: DrawPolygon
+    }
+}
+
+export function createDrawer<K extends keyof DrawerTypeMap>(map: mapboxgl.Map, type: K, options: DrawerTypeMap[K]['options']): DrawerTypeMap[K]['drawer'] {
+    if (type === 'Point') return new DrawPoint(map, options);
+    if (type === 'LineString') return new DrawLineString(map, options);
+    if (type === 'Polygon') return new DrawPolygon(map, options);
+}
+
 export class DrawerManager {
     private draws: Array<DrawBase>;
     private currentType?: DrawType;

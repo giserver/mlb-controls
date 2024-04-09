@@ -1,5 +1,4 @@
 import { creator } from 'wheater';
-import booleanClockwise from '@turf/boolean-clockwise';
 import { DrawBase, DrawBaseOptions, DrawType } from "./drawBase";
 
 export interface DrawPolygonOptions extends DrawBaseOptions {
@@ -214,13 +213,6 @@ export class DrawPolygon extends DrawBase<GeoJSON.Polygon>{
 
         if (coords.length > 2)
             coords.push(coords[0]);
-
-        if (coords.length > 2) {
-            this.currentFeature.properties = {
-                ...this.currentFeature.properties,
-                clockwise: booleanClockwise(coords)
-            }
-        }
 
         this.updateDataSource();
     }

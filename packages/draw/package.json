@@ -24,6 +24,5 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@turf/boolean-clockwise": "^6.5.0"
   }
 }

@@ -275,8 +275,14 @@ export class MeasureManager extends DrawerManager {
      */
     reRender() {
         const features = new Array<GeoJSON.Feature>();
-        this.featuresMap.forEach(x => {
-            features.push(...x.features);
+        this.featuresMap.forEach((v, k) => {
+            if (k === 'Polygon') {
+                v.features.forEach(f => {
+                    if (f.geometry.type === 'Polygon')
+                        f.properties['clockwise'] = booleanClockwise(f.geometry.coordinates[0])
+                });
+            }
+            features.push(...v.features);
         });
 
         (this.map.getSource(this.id) as mapboxgl.GeoJSONSource).setData({

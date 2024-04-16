@@ -1,0 +1,17 @@
+.mlb-ctrl-grid{
+    width: 64px;
+}
+
+.mlb-ctrl-grid-type{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mlb-ctrl-grid-type > input{
+    margin: 0.4rem;
+}
+
+.mlb-ctrl-grid-type > label{
+    cursor: pointer;
+}

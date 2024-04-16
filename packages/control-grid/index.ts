@@ -1,7 +1,10 @@
 import { creator, dom } from 'wheater';
 import { MapControl, MapControlOptions, TileTranslate } from "@mlb-controls/common";
+import { ExtendControl } from '@mlb-controls/extend';
 import { IGridControlLanguage } from "./lang";
-import mapboxgl from 'mapbox-gl';
+
+import './index.css';
+import "@mlb-controls/extend/dist/style.css";
 
 type TGridType = "lnglat" | "tile";
 
@@ -13,7 +16,8 @@ export interface GridControlOptions extends MapControlOptions<IGridControlLangua
     tile?: {
         schema?: "xyz",
         textBuilder?(zoom: number, xTile: number, yTile: number): string
-    }
+    },
+    useUI?: boolean
 }
 
 export class GridControl extends MapControl<IGridControlLanguage> {
@@ -33,13 +37,12 @@ export class GridControl extends MapControl<IGridControlLanguage> {
 
     private lastZoom = -1;
     private moveHandler = (e: { target: mapboxgl.Map }) => {
-
+        const map = e.target;
         if (this.options.defaultShow === 'lnglat')
-            this.updateLngLatGrid(e.target);
+            this.updateLngLatGrid(map);
         else if (this.options.defaultShow === 'tile')
-            this.updateTileGrid(e.target);
-
-        this.lastZoom = e.target.getZoom();
+            this.updateTileGrid(map);
+        this.lastZoom = map.getZoom();
     }
 
     /**
@@ -53,7 +56,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
         tile: {
             schema: 'xyz',
             textBuilder: (zoom, xTile, yTile) => `${zoom} / ${xTile} / ${yTile}`
-        }
+        },
+        useUI: true,
     }) {
         super(options, {});
     }
@@ -73,8 +77,58 @@ export class GridControl extends MapControl<IGridControlLanguage> {
 
         this.changeType(this.options.defaultShow!);
 
-        map.on('move', this.moveHandler);
-        return dom.createHtmlElement('div');
+        map.on('moveend', this.moveHandler);
+
+        if (this.options.useUI) {
+            const extend = new ExtendControl({
+                os: 'pc',
+                icon1: dom.createHtmlElement('div', [], ["Grid"]),
+                content: dom.createHtmlElement('div', ["mlb-ctrl-grid"], [
+                    dom.createHtmlElement('div', ["mlb-ctrl-grid-type"], [
+                        dom.createHtmlElement('input', [], [], {
+                            onInit: e => {
+                                e.type = 'radio';
+                                e.id = this.id_source + "lnglat";
+                                e.name = this.id_source + "grid-type";
+                                e.checked = this.options.defaultShow === 'lnglat';
+                            }
+                        }),
+                        dom.createHtmlElement('label', [], ["经纬"], {
+                            attributes: {
+                                for: this.id_source + "lnglat",
+                            }
+                        })
+                    ], {
+                        onClick: () => {
+                            this.changeType('lnglat');
+                        }
+                    }),
+
+                    dom.createHtmlElement('div', ["mlb-ctrl-grid-type"], [
+                        dom.createHtmlElement('input', [], [], {
+                            onInit: e => {
+                                e.type = 'radio';
+                                e.id = this.id_source + "tile";
+                                e.name = this.id_source + "grid-type";
+                                e.checked = this.options.defaultShow === 'tile';
+                            }
+                        }),
+                        dom.createHtmlElement('label', [], ["瓦片"], {
+                            attributes: {
+                                'for': this.id_source + "tile"
+                            }
+                        })
+                    ], {
+                        onClick: () => {
+                            this.changeType('tile')
+                        }
+                    })
+                ])
+            });
+
+            return extend.onAdd(map);
+        } else
+            return dom.createHtmlElement('div');
     }
     removeControl(map: mapboxgl.Map): void {
         map.off("move", this.moveHandler);
@@ -98,8 +152,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                 features.push({
                     type: 'Feature',
                     properties: {
-                        "schema": "lnglat",
-                        "type": "lng",
+                        "type": "lnglat",
+                        "sub_type": "lng",
                         "value": `${parseFloat(l.toFixed(9))} ${l > 0 ? 'E' : 'W'}`
                     },
                     geometry: {
@@ -112,8 +166,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                 features.push({
                     type: 'Feature',
                     properties: {
-                        "schema": "lnglat",
-                        "type": "lng",
+                        "type": "lnglat",
+                        "sub_type": "lng",
                         "value": `${parseFloat(l.toFixed(9))} ${l > 0 ? 'E' : 'W'}`
                     },
                     geometry: {
@@ -129,8 +183,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                 features.push({
                     type: 'Feature',
                     properties: {
-                        "schema": "lnglat",
-                        "type": "lat",
+                        "type": "lnglat",
+                        "sub_type": "lat",
                         "value": `${parseFloat(l.toFixed(9))} ${l > 0 ? 'N' : 'S'}`
                     },
                     geometry: {
@@ -144,8 +198,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                 features.push({
                     type: 'Feature',
                     properties: {
-                        "schema": "lnglat",
-                        "type": "lat",
+                        "type": "lnglat",
+                        "sub_type": "lat",
                         "value": `${parseFloat(l.toFixed(9))} ${l > 0 ? 'N' : 'S'}`
                     },
                     geometry: {
@@ -179,8 +233,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             features.push({
                 type: 'Feature',
                 properties: {
-                    schema: "tile",
-                    type: 'vec',
+                    type: "tile",
+                    "sub_type": 'vec',
                 },
                 geometry: {
                     type: 'LineString',
@@ -197,8 +251,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                     features.push({
                         type: 'Feature',
                         properties: {
-                            schema: "tile",
-                            type: 'hor',
+                            type: "tile",
+                            "sub_type": 'hor',
                         },
                         geometry: {
                             type: 'LineString',
@@ -214,7 +268,7 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                 features.push({
                     type: 'Feature',
                     properties: {
-                        schema: "tile",
+                        type: "tile",
                         value: this.options.tile!.textBuilder!(zoom, i, j)
                     },
                     geometry: {
@@ -240,8 +294,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ['all',
                 ['==', ["geometry-type"], "LineString"],
-                ['==', ['get', 'schema'], "lnglat"],
-                ['==', ['get', 'type'], 'lng']]
+                ['==', ['get', 'type'], "lnglat"],
+                ['==', ['get', 'sub_type'], 'lng']]
         });
 
         map.addLayer({
@@ -250,8 +304,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ['all',
                 ['==', ["geometry-type"], "LineString"],
-                ['==', ['get', 'schema'], "lnglat"],
-                ['==', ['get', 'type'], 'lat']]
+                ['==', ['get', 'type'], "lnglat"],
+                ['==', ['get', 'sub_type'], 'lat']]
         });
 
         map.addLayer({
@@ -260,8 +314,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ["all",
                 ['==', ["geometry-type"], 'LineString'],
-                ['==', ['get', 'schema'], 'lnglat'],
-                ['==', ['get', 'type'], 'lng']
+                ['==', ['get', 'type'], 'lnglat'],
+                ['==', ['get', 'sub_type'], 'lng']
             ],
             layout: {
                 "text-field": ['get', 'value'],
@@ -280,8 +334,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ["all",
                 ['==', ["geometry-type"], 'LineString'],
-                ['==', ['get', 'schema'], 'lnglat'],
-                ['==', ['get', 'type'], 'lat']
+                ['==', ['get', 'type'], 'lnglat'],
+                ['==', ['get', 'sub_type'], 'lat']
             ],
             layout: {
                 "text-field": ['get', 'value'],
@@ -300,8 +354,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ["all",
                 ['==', ["geometry-type"], 'LineString'],
-                ['==', ['get', 'schema'], 'tile'],
-                ['==', ['get', 'type'], 'vec']
+                ['==', ['get', 'type'], 'tile'],
+                ['==', ['get', 'sub_type'], 'vec']
             ]
         });
 
@@ -311,8 +365,8 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ['all',
                 ['==', ["geometry-type"], 'LineString'],
-                ['==', ['get', 'schema'], 'tile'],
-                ['==', ['get', 'type'], 'hor']
+                ['==', ['get', 'type'], 'tile'],
+                ['==', ['get', 'sub_type'], 'hor']
             ]
         });
 
@@ -322,7 +376,7 @@ export class GridControl extends MapControl<IGridControlLanguage> {
             source: this.id_source,
             filter: ['all',
                 ['==', ["geometry-type"], 'Point'],
-                ['==', ['get', 'schema'], 'tile']
+                ['==', ['get', 'type'], 'tile']
             ],
             layout: {
                 "text-field": ['get', 'value']

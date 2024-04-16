@@ -70,7 +70,11 @@ importers:
 
   packages/control-eye: {}
 
-  packages/control-grid: {}
+  packages/control-grid:
+    dependencies:
+      '@mlb-controls/extend':
+        specifier: workspace:^
+        version: link:../control-extend
 
   packages/control-location: {}
 

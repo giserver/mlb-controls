@@ -59,7 +59,10 @@ export class GridControl extends MapControl<IGridControlLanguage> {
         },
         useUI: true,
     }) {
-        super(options, {});
+        super(options, {
+            lnglat: '经纬',
+            tile: '瓦片'
+        });
     }
 
     createElement(map: mapboxgl.Map): HTMLElement {
@@ -93,7 +96,7 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                                 e.checked = this.options.defaultShow === 'lnglat';
                             }
                         }),
-                        dom.createHtmlElement('label', [], ["经纬"], {
+                        dom.createHtmlElement('label', [], [this.lang.lnglat], {
                             attributes: {
                                 for: this.id_source + "lnglat",
                             }
@@ -113,7 +116,7 @@ export class GridControl extends MapControl<IGridControlLanguage> {
                                 e.checked = this.options.defaultShow === 'tile';
                             }
                         }),
-                        dom.createHtmlElement('label', [], ["瓦片"], {
+                        dom.createHtmlElement('label', [], [this.lang.tile], {
                             attributes: {
                                 'for': this.id_source + "tile"
                             }

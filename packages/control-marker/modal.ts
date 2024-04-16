@@ -1,7 +1,7 @@
 import { deep, dom } from 'wheater';
 import { ConfirmModalOptions, createConfirmModal } from '@mlb-controls/common';
 import { getMapMarkerSpriteImages } from './symbol-icon';
-import { MarkerLayerProperties, TMarkerFeature } from './types';
+import { MarkerLayer, TMarkerFeature } from './types';
 import { IMarkerControlLanguage } from './lang';
 
 type EditMode = "update" | "create";
@@ -65,7 +65,7 @@ export function createFeaturePropertiesEditModal(
     feature: TMarkerFeature,
     options: Omit<Omit<Omit<ConfirmModalOptions, 'content'>, 'withCancel'>, 'title'> & {
         mode: EditMode,
-        layers: MarkerLayerProperties[],
+        layers: MarkerLayer[],
         onPropChange?(): void,
         lang: IMarkerControlLanguage
     }) {
@@ -115,7 +115,7 @@ export function createFeaturePropertiesEditModal(
         ['mlb-ctrl-marker-modal-content-edit-item'],
         [dom.createHtmlElement('label', [], [lang.markerName]), createInputBindingElement(properties, 'name', input => {
             input.type = 'text';
-            input.maxLength = 12;
+            input.maxLength = 20;
         })]));
 
 

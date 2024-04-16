@@ -54,23 +54,19 @@ export class DrawerManager {
 
     start(type: DrawType) {
         this.stop();
-
         this.currentType = type;
-        this.currentDraw!.start();
-
         this.options.onStart?.();
+        this.currentDraw!.start();
     }
 
     stop() {
         this.currentDraw?.stop();
-        this.currentType = undefined;
-
         this.options.onStop?.();
+        this.currentType = undefined;
     }
 
     clear() {
         this.draws.forEach(draw => draw.clear());
-
         this.options.onClear?.();
     }
 }

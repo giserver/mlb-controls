@@ -67,6 +67,9 @@ onMounted(() => {
                         map_libre.addControl(ctrl);
                     })
                 }
+
+                map_box.addControl(new mapboxgl.FullscreenControl());
+                map_libre.addControl(new maplibre.FullscreenControl());
             }
         }, 10)
     });

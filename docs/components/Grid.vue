@@ -6,7 +6,7 @@ import { GridControl } from "../../packages/control-grid/index";
 import { LocationControl } from '../../packages/control-location/index';
 
 function onLoaded() {
-    return () => [new GridControl(), new LocationControl(),new mapboxgl.FullscreenControl()] as any;
+    return () => [new GridControl(), new LocationControl()] as any;
 }
 </script>
 

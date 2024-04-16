@@ -18,6 +18,10 @@
     color: black !important;
 }
 
+.mlb-ctrl-modal select{
+    background-color: white;
+}
+
 .mlb-ctrl-extend{
     color: black;
 }

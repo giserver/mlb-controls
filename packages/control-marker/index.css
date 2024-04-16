@@ -108,7 +108,7 @@
     padding-left: 16px;
     display: none;
     max-height: 300px;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
 .mlb-ctrl-marker-layer-content::-webkit-scrollbar {
@@ -140,16 +140,26 @@
     background-color: #f2f2f2;
 }
 
-.mlb-ctrl-marker-layer-content-item:hover .mlb-ctrl-marker-layer-content-item-suffix{
+.mlb-ctrl-marker-layer-content-item:hover .mlb-ctrl-marker-layer-content-item-suffix {
     display: flex;
 }
 
-.mlb-ctrl-marker-layer-content-item-prefix{
+.mlb-ctrl-marker-layer-content-item-prefix {
     flex: 1;
 }
 
-.mlb-ctrl-marker-layer-content-item-suffix{
+.mlb-ctrl-marker-layer-content-item-suffix {
     display: none;
+}
+
+.mlb-ctrl-marker-layer-content-item-name {
+    max-width: 100px;
+    
+    overflow: hidden;
+    /* 显示省略符号来代表被修剪的文本。 */
+    text-overflow: ellipsis;
+    /* 文本不换行 */
+    white-space: nowrap;
 }
 
 

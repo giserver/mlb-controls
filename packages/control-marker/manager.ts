@@ -1,30 +1,16 @@
 import { creator } from 'wheater';
 import centroid from '@turf/centroid'
 import bbox from '@turf/bbox'
-import { TMarkerFeature, TMarkerFeatureCollection } from './types';
-import { DrawBaseOptions, DrawType, DrawerManager } from '@mlb-controls/draw';
-
+import { TMarkerFeature, MarkerLayer, GeometryStyle } from './types';
 
 
 export interface MarkerManagerOptions {
     /**
      * 初始化数据
      */
-    data: TMarkerFeatureCollection;
+    features: TMarkerFeature[];
 
-    /**
-     * 绘制结束
-     * 
-     * 数据并没有存入MarkerManger中
-     * @param id 
-     * @param geometry 
-     */
-    onDrawed(id: string, geometry: GeoJSON.Geometry): void;
-
-    /**
-     * 在绘制之前执行，可以取消测量等占用鼠标事件的功能
-     */
-    beforeDraw?(): void;
+    layers: MarkerLayer[];
 }
 
 export class MarkerManager {
@@ -104,46 +90,20 @@ export class MarkerManager {
     }];
 
     private hiddenLayerIds = new Map<string, string>();
-    private drawerManager: DrawerManager;
 
     constructor(private map: mapboxgl.Map, private options: MarkerManagerOptions) {
 
         this.map.addSource(this.id, {
             type: 'geojson',
-            data: options.data
+            data: {
+                type: 'FeatureCollection',
+                features: options.features
+            }
         });
 
         this.layers.forEach(x => this.map.addLayer(x));
-
-        const drawOptions = {
-            once: true,
-            onDrawed: (id, geometry) => {
-                this.drawerManager.clear();
-                this.options.onDrawed(id, geometry);
-            }
-        } as DrawBaseOptions;
-
-        this.drawerManager = new DrawerManager(map, {
-            point: {
-                ...drawOptions
-            },
-            lineString: {
-                ...drawOptions
-            },
-            polygon: {
-                ...drawOptions
-            }
-        });
     }
 
-    /**
-     * 绘制
-     * @param type 
-     */
-    draw(type: DrawType) {
-        this.options.beforeDraw?.();
-        this.drawerManager.start(type);
-    }
 
     easeTo(id: string, options: Omit<mapboxgl.EaseToOptions, "center">) {
         const feature = this.getFeature(id);
@@ -158,7 +118,7 @@ export class MarkerManager {
         throw Error(`feature id not found: ${id} `);
     }
 
-    fitTo(id: string, options: mapboxgl.FitBoundsOptions={}) {
+    fitTo(id: string, options: mapboxgl.FitBoundsOptions = {}) {
         const feature = this.getFeature(id);
         if (feature) {
             const box = bbox(feature as any);
@@ -177,7 +137,35 @@ export class MarkerManager {
      * @returns 
      */
     getFeature(id: string) {
-        return this.options.data.features.find(x => x.properties.id === id);
+        return this.options.features.find(x => x.properties.id === id);
+    }
+
+    /**
+     * 根据图层id获取图层下的features
+     * @param layerId 
+     * @returns 
+     */
+    getFeaturesByLayerId(layerId: string) {
+        return this.options.features.filter(x => x.properties.layerId === layerId);
+    }
+
+    /**
+     * 
+     * @param id 
+     * @returns 
+     */
+    getLayer(id: string) {
+        const layer = this.options.layers.find(x => x.id === id);
+        if (!layer) throw Error(`layer id not existed: ${id}`);
+        return layer;
+    }
+
+    /**
+     * 获取所有图层
+     * @returns 
+     */
+    getLayers() {
+        return this.options.layers;
     }
 
     /**
@@ -185,12 +173,12 @@ export class MarkerManager {
      * @param feature 
      */
     addOrUpdateFeature(feature: TMarkerFeature) {
-        const existedFeature = this.options.data.features.find(x => x.properties.id === feature.properties.id);
+        const existedFeature = this.options.features.find(x => x.properties.id === feature.properties.id);
         if (existedFeature) {
             existedFeature.geometry = feature.geometry;
             existedFeature.properties = feature.properties;
         } else {
-            this.options.data.features.push(feature);
+            this.options.features.push(feature);
         }
 
         this.reRender();
@@ -202,16 +190,26 @@ export class MarkerManager {
      * @returns 
      */
     removeFeature(id: string) {
-        const index = this.options.data.features.findIndex(x => x.properties.id === id);
+        const index = this.options.features.findIndex(x => x.properties.id === id);
         if (index < 0) return;
-        this.options.data.features.splice(index, 1);
+        this.options.features.splice(index, 1);
         this.reRender();
     }
 
+    /**
+     * 删除整个图层
+     * @param id
+     * @returns 
+     */
     removeLayer(id: string) {
-        this.options.data.features = this.options.data.features.filter(x => x.properties.layerId !== id);
+        const index = this.options.layers.findIndex(x => x.id === id);
+        if (index < 0) return;
+        this.options.layers.splice(index, 1);
+
+        this.options.features = this.options.features.filter(x => x.properties.layerId !== id);
         if (this.hiddenLayerIds.has(id))
             this.hiddenLayerIds.delete(id);
+
         this.reRender();
     }
 
@@ -250,7 +248,7 @@ export class MarkerManager {
         (this.map.getSource(this.id) as mapboxgl.GeoJSONSource)
             .setData({
                 type: "FeatureCollection",
-                features: this.options.data.features.filter(x => !this.hiddenLayerIds.has(x.properties.layerId))
+                features: this.options.features.filter(x => !this.hiddenLayerIds.has(x.properties.layerId))
             });
     }
 }

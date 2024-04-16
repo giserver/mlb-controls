@@ -1,64 +1,33 @@
-import { creator, date, deep, dom } from "wheater";
+import { creator, deep, dom } from "wheater";
 import { MapControl, MapControlOptions } from "@mlb-controls/common";
 import { ExtendControl, ExtendControlOptions } from "@mlb-controls/extend";
 import { IMarkerControlLanguage } from "./lang";
 import { getMapMarkerSpriteImages } from "./symbol-icon";
 import { MarkerManager } from "./manager";
-import { TMarkerFeature, GeometryStyle, MarkerLayerProperties, TMarkerFeatureCollection } from "./types";
+import { TMarkerFeature, GeometryStyle, MarkerLayer, Events } from "./types";
+import { createFeaturePropertiesEditModal } from "./modal";
+import { LayerCatalog } from "./catalog";
 
 import "./index.css"
 import "@mlb-controls/common/dist/style.css";
 import "@mlb-controls/extend/dist/style.css";
-import { createFeaturePropertiesEditModal } from "./modal";
-import { LayerCatalog } from "./catalog";
-
-interface MarkerItemOptions {
-    onCreate?(feature: TMarkerFeature): void,
-    onRemove?(feature: TMarkerFeature): void,
-    onUpdate?(feature: TMarkerFeature): void
-}
-
-interface MarkerLayerOptions {
-    onCreate?(properties: MarkerLayerProperties): void,
-    onRemove?(properties: MarkerLayerProperties): void,
-    onRename?(properties: MarkerLayerProperties): void,
-}
-
+import { DrawBaseOptions, DrawerManager } from "@mlb-controls/draw";
 
 export interface MarkerControlOptions extends MapControlOptions<IMarkerControlLanguage>, Omit<Omit<ExtendControlOptions, "os">, "content"> {
-    defaultStyle?: GeometryStyle,
-    layers?: MarkerLayerProperties[],
-    featureCollection?: TMarkerFeatureCollection,
-    markerItemOptions?: MarkerItemOptions,
-    markerLayerOptions?: MarkerLayerOptions
+    defaultStyle?: GeometryStyle;
+    layers?: MarkerLayer[];
+    features?: TMarkerFeature[];
+    events?: Events;
+
+    /**
+     * 停止其他控件，防止地图事件冲突，如测量等
+     */
+    beforeDraw?(): void;
 }
 
 export class MarkerControl extends MapControl<IMarkerControlLanguage> {
     private extendControl: ExtendControl;
     private markerContainer: HTMLDivElement;
-
-    private lastPropertiesCache: { name: string, layerId: string, style: GeometryStyle } = {
-        name: "",
-        layerId: "",
-        style: {
-            textSize: 14,
-            textColor: 'black',
-            textHaloColor: 'white',
-            textHaloWidth: 1,
-
-            pointIcon: "标1.png",
-            pointIconColor: "#ff0000",
-            pointIconSize: 0.3,
-
-            lineColor: '#0000ff',
-            lineWidth: 3,
-
-            polygonColor: '#0000ff',
-            polygonOpacity: 0.5,
-            polygonOutlineColor: '#000000',
-            polygonOutlineWidth: 2,
-        }
-    };
 
     /**
      *
@@ -132,8 +101,10 @@ export class MarkerControl extends MapControl<IMarkerControlLanguage> {
             }
         }).querySelector('svg')!;
 
-        this.options.markerLayerOptions = {};
-        this.options.featureCollection ??= { type: 'FeatureCollection', features: [] };
+        this.options.features ??= [];
+        this.options.events ??= {};
+
+        // 添加默认图层
         if (!options.layers || options.layers.length === 0) {
             const layer = {
                 id: creator.uuid(),
@@ -141,12 +112,8 @@ export class MarkerControl extends MapControl<IMarkerControlLanguage> {
                 date: Date.now()
             }
             options.layers = [layer];
-            options.markerLayerOptions?.onCreate?.(layer);
+            options.events?.onLayerCreate?.(layer);
         }
-
-        deep.setProps(this.options.defaultStyle ?? {}, this.lastPropertiesCache.style, { skipEmpty: true });
-        this.lastPropertiesCache.layerId = options.layers[0].id;
-        this.lastPropertiesCache.name = this.lang.newMarkerName;
 
         this.markerContainer = dom.createHtmlElement("div", ["mlb-ctrl-marker"], []);
         this.extendControl = new ExtendControl({
@@ -164,8 +131,40 @@ export class MarkerControl extends MapControl<IMarkerControlLanguage> {
         });
 
         const manager = new MarkerManager(map, {
-            data: this.options.featureCollection!,
+            features: this.options.features!,
+            layers: this.options.layers!,
+        });
+
+        const lastPropertiesCache: { name: string, layerId: string, style: GeometryStyle } = {
+            name: "",
+            layerId: "",
+            style: {
+                textSize: 14,
+                textColor: 'black',
+                textHaloColor: 'white',
+                textHaloWidth: 1,
+
+                pointIcon: "标1.png",
+                pointIconColor: "#ff0000",
+                pointIconSize: 0.3,
+
+                lineColor: '#0000ff',
+                lineWidth: 3,
+
+                polygonColor: '#0000ff',
+                polygonOpacity: 0.5,
+                polygonOutlineColor: '#000000',
+                polygonOutlineWidth: 2,
+            }
+        }
+        deep.setProps(this.options.defaultStyle ?? {}, lastPropertiesCache.style, { skipEmpty: true });
+        lastPropertiesCache.layerId = this.options.layers![0].id;
+        lastPropertiesCache.name = this.lang.newMarkerName;
+
+        const drawOptions = {
+            once: true,
             onDrawed: (id, geometry) => {
+                drawerManager.clear();
                 const featrue = {
                     type: 'Feature',
                     id,
@@ -173,10 +172,10 @@ export class MarkerControl extends MapControl<IMarkerControlLanguage> {
                     properties: {
                         id,
                         date: Date.now(),
-                        name: this.lastPropertiesCache.name,
-                        layerId: this.lastPropertiesCache.layerId,
+                        name: lastPropertiesCache.name,
+                        layerId: lastPropertiesCache.layerId,
                         style: {
-                            ...this.lastPropertiesCache.style
+                            ...lastPropertiesCache.style
                         }
                     }
                 } as TMarkerFeature;
@@ -185,28 +184,41 @@ export class MarkerControl extends MapControl<IMarkerControlLanguage> {
 
                 createFeaturePropertiesEditModal(featrue, {
                     mode: 'create',
-                    layers: [{
-                        id: "123",
-                        date: Date.now(),
-                        name: "asdf"
-                    }],
+                    layers: manager.getLayers(),
                     lang: this.lang,
                     onCancel: () => {
+                        // 取消保存新创建的feature
                         manager.removeFeature(featrue.properties.id);
                     },
                     onConfirm: () => {
-                        this.options.markerItemOptions?.onCreate?.(featrue);
+                        this.options.events!.onMarkerCreate?.(featrue);
                     },
                     onPropChange: () => {
                         manager.reRender();
                     }
                 });
             }
+        } as DrawBaseOptions;
+
+        const drawerManager = new DrawerManager(map, {
+            onStart: this.options.beforeDraw,
+            point: {
+                ...drawOptions
+            },
+            lineString: {
+                ...drawOptions
+            },
+            polygon: {
+                ...drawOptions
+            }
         });
+
+
 
         this.extendControl.onAdd(map);
 
-        this.markerContainer.append(...this.options.layers!.map(l => new LayerCatalog(manager, l, this.options.featureCollection!.features.filter(x => x.properties.layerId === l.id)).element))
+        this.markerContainer.append(...this.options.layers!.map(l => new LayerCatalog(l.id, manager, this.lang).element));
+
         return this.extendControl.element;
     }
 

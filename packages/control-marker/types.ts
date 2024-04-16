@@ -25,7 +25,7 @@ export interface MarkerFeatrueProperties {
     style: GeometryStyle
 }
 
-export interface MarkerLayerProperties {
+export interface MarkerLayer {
     id: string,
     name: string,
     date: number
@@ -33,6 +33,14 @@ export interface MarkerLayerProperties {
 
 export type TMarkerFeature = GeoJSON.Feature<GeoJSON.Geometry, MarkerFeatrueProperties>;
 
-export type TMarkerFeatureCollection = GeoJSON.FeatureCollection<GeoJSON.Geometry, MarkerFeatrueProperties>;
-
 export type ExportGeoJsonType = TMarkerFeature | GeoJSON.FeatureCollection<GeoJSON.Geometry, MarkerFeatrueProperties>;
+
+export interface Events {
+    onLayerCreate?(properties: MarkerLayer): Promise<void>,
+    onLayerRemove?(properties: MarkerLayer): Promise<void>,
+    onLayerRename?(properties: MarkerLayer): Promise<void>,
+
+    onMarkerCreate?(feature: TMarkerFeature): Promise<void>,
+    onMarkerRemove?(feature: TMarkerFeature): Promise<void>,
+    onMarkerUpdate?(feature: TMarkerFeature): Promise<void>
+}

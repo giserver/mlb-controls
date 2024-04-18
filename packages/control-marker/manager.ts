@@ -1,13 +1,12 @@
 import { creator } from 'wheater';
 import centroid from '@turf/centroid'
 import bbox from '@turf/bbox'
-import { TMarkerFeature, MarkerLayer, GeometryStyle } from './types';
+import { TMarkerFeature, MarkerLayer } from './types';
 
 
 export interface MarkerManagerOptions {
-    /**
-     * 初始化数据
-     */
+    map: mapboxgl.Map
+
     features: TMarkerFeature[];
 
     layers: MarkerLayer[];
@@ -91,9 +90,9 @@ export class MarkerManager {
 
     private hiddenLayerIds = new Map<string, string>();
 
-    constructor(private map: mapboxgl.Map, private options: MarkerManagerOptions) {
+    constructor(private options: MarkerManagerOptions) {
 
-        this.map.addSource(this.id, {
+        this.options.map.addSource(this.id, {
             type: 'geojson',
             data: {
                 type: 'FeatureCollection',
@@ -101,15 +100,19 @@ export class MarkerManager {
             }
         });
 
-        this.layers.forEach(x => this.map.addLayer(x));
+        this.layers.forEach(x => this.options.map.addLayer(x));
     }
 
-
+    /**
+     * 平移到指定Feature
+     * @param id 
+     * @param options 
+     */
     easeTo(id: string, options: Omit<mapboxgl.EaseToOptions, "center">) {
         const feature = this.getFeature(id);
         if (feature) {
             const center = centroid(feature as any);
-            this.map.easeTo({
+            this.options.map.easeTo({
                 center: center.geometry.coordinates as [number, number],
                 ...options
             });
@@ -118,6 +121,11 @@ export class MarkerManager {
         throw Error(`feature id not found: ${id} `);
     }
 
+    /**
+     * 地图fit bounds 到 Feature
+     * @param id 
+     * @param options 
+     */
     fitTo(id: string, options: mapboxgl.FitBoundsOptions = {}) {
         const feature = this.getFeature(id);
         if (feature) {
@@ -125,7 +133,7 @@ export class MarkerManager {
             options.maxZoom ??= 20;
             options.padding ??= 50;
 
-            this.map.fitBounds([box[0], box[1], box[2], box[3]], options);
+            this.options.map.fitBounds([box[0], box[1], box[2], box[3]], options);
         }
 
         throw Error(`feature id not found: ${id} `);
@@ -150,7 +158,7 @@ export class MarkerManager {
     }
 
     /**
-     * 
+     * 通过id获取图层配置
      * @param id 
      * @returns 
      */
@@ -204,12 +212,30 @@ export class MarkerManager {
     removeLayer(id: string) {
         const index = this.options.layers.findIndex(x => x.id === id);
         if (index < 0) return;
-        this.options.layers.splice(index, 1);
 
-        this.options.features = this.options.features.filter(x => x.properties.layerId !== id);
+        this.options.layers.splice(index, 1);
         if (this.hiddenLayerIds.has(id))
             this.hiddenLayerIds.delete(id);
 
+        this.options.features = this.options.features.filter(x => x.properties.layerId !== id);
+        this.reRender();
+    }
+
+    /**
+     * 删除多个图层
+     * @param ids 
+     */
+    removeLayers(ids: string[]) {
+        ids.forEach(id => {
+            const index = this.options.layers.findIndex(x => x.id === id);
+            if (index < 0) return;
+
+            this.options.layers.splice(index, 1);
+            if (this.hiddenLayerIds.has(id))
+                this.hiddenLayerIds.delete(id);
+        });
+
+        this.options.features = this.options.features.filter(x => !ids.includes(x.properties.layerId));
         this.reRender();
     }
 
@@ -219,7 +245,7 @@ export class MarkerManager {
      */
     setVisible(value: boolean) {
         this.layers.forEach(x => {
-            this.map.setLayoutProperty(x.id, "visibility", value ? "visible" : "none");
+            this.options.map.setLayoutProperty(x.id, "visibility", value ? "visible" : "none");
         })
     }
 
@@ -242,10 +268,27 @@ export class MarkerManager {
     }
 
     /**
+     * 
+     * @param ids 
+     * @param value 
+     */
+    setVisibleByLayers(ids: string[], value: boolean) {
+        ids.forEach(id => {
+            if (value) {
+                this.hiddenLayerIds.delete(id);
+            } else if (!this.hiddenLayerIds.has(id)) {
+                this.hiddenLayerIds.set(id, id);
+            }
+        });
+
+        this.reRender();
+    }
+
+    /**
      * 重绘所有图形
      */
     reRender() {
-        (this.map.getSource(this.id) as mapboxgl.GeoJSONSource)
+        (this.options.map.getSource(this.id) as mapboxgl.GeoJSONSource)
             .setData({
                 type: "FeatureCollection",
                 features: this.options.features.filter(x => !this.hiddenLayerIds.has(x.properties.layerId))

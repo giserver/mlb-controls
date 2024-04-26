@@ -110,7 +110,7 @@ function calLineString(g: GeoJSON.Position[], options?: TMeasureCalLineStringOpt
                     coordinates: center.geometry.coordinates
                 },
                 properties: {
-                    value: options?.format?.(length, i, false, true) || `${(length).toFixed(2)} m`,
+                    value: options?.format?.(length, i, false, true) || `${length.toFixed(2)} m`,
                     center: true,
                     type: 'LineString'
                 }
@@ -127,7 +127,7 @@ function calLineString(g: GeoJSON.Position[], options?: TMeasureCalLineStringOpt
                 coordinates: current
             },
             properties: {
-                value: options?.format?.(sumLength * 1000, i, i === g.length - 1, false) || `${(sumLength * 1000).toFixed(2)} m`,
+                value: options?.format?.(sumLength, i, i === g.length - 1, false) || `${sumLength.toFixed(2)} m`,
                 type: 'LineString'
             }
         });

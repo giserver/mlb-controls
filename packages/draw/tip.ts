@@ -2,7 +2,12 @@ import { dom } from 'wheater';
 
 export class Tip {
 
-    private element = dom.createHtmlElement('div', ['mapboxgl-ctrl-tip']);
+    private element = dom.createHtmlElement('div', ['mlb-ctrl-tip'],[],{
+        onInit:e=>{
+            e.style.position = "absolute";
+            e.style.transform = "translate(12px, 12px)";
+        }
+    });
     private eventShow: keyof mapboxgl.MapLayerEventType;
     private eventHide: keyof mapboxgl.MapLayerEventType;
     private declare lngLat: mapboxgl.LngLatLike;
